@@ -11,6 +11,7 @@ class SugarBeanMailer extends SugarBean
     private $bean;
     private $templateName;
     private $templateData;
+    private $templateFile;
 
     public function __construct($bean) {
         $this->bean = $bean;
@@ -33,13 +34,14 @@ class SugarBeanMailer extends SugarBean
         $this->notify_list = $notify_list;
     }
 
-    public function setTemplate($templateName, $templateData) {
+    public function setTemplate($templateName, $templateData, $templateFile = null) {
         $this->templateName = $templateName;
         $this->templateData = $templateData;
+        $this->templateFile = $templateFile;
     }
 
     protected function set_notification_body($xtpl, $bean) {
-        return new _BeanXTemplate($xtpl, $this->templateName, $this->templateData);
+        return new _BeanXTemplate($xtpl, $this->templateName, $this->templateData, $this->templateFile);
     }
 
     /**
@@ -89,11 +91,20 @@ class _BeanXTemplate
     private $templateName;
     private $templateData;
 
-    public function __construct($xtpl, $templateName, $templateData) {
+    public function __construct($xtpl, $templateName, $templateData, $file = null) {
         global $beanList;
         $this->xtpl = $xtpl;
         $this->templateName = $templateName;
         $this->templateData = $templateData;
+        if($file) {
+            if(file_exists($file)) {
+                $this->xtpl->filecontents=$this->xtpl->r_getfile($file);
+                $this->xtpl->blocks=$this->xtpl->maketree($this->xtpl->filecontents,$this->xtpl->mainblock);
+            }
+            else {
+                $GLOBALS['log']->error("SugarBeanMailer: template file {$templateFile} not found");
+            }
+        }
         $this->xtpl->assign("OBJECT", translate('LBL_MODULE_NAME'));
         if($this->templateData) {
             foreach($this->templateData as $name => $value) {
