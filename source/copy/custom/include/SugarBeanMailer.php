@@ -17,6 +17,12 @@ class SugarBeanMailer extends SugarBean
         $this->bean = $bean;
         $this->id = $bean->id;
         $this->module_dir = $bean->module_dir;
+
+        if(!empty($this->bean->assigned_user_id)) {
+            $notify_user = new User();
+            $notify_user->retrieve($this->bean->assigned_user_id);
+            $this->new_assigned_user_name = $notify_user->full_name;
+        }
     }
 
     public function sendNotifications() {
@@ -34,13 +40,17 @@ class SugarBeanMailer extends SugarBean
         $this->notify_list = $notify_list;
     }
 
-    public function setTemplate($templateName, $templateData, $templateFile = null) {
+    public function setTemplate($templateName, $templateData = array(), $templateFile = null) {
         $this->templateName = $templateName;
         $this->templateData = $templateData;
         $this->templateFile = $templateFile;
     }
 
     protected function set_notification_body($xtpl, $bean) {
+        if(in_array('set_notification_body', get_class_methods($this->bean))) {
+            $this->bean->current_notify_user = $this->current_notify_user;
+            $xtpl = $this->bean->set_notification_body($xtpl, $this->bean);
+        }
         return new _BeanXTemplate($xtpl, $this->templateName, $this->templateData, $this->templateFile);
     }
 
