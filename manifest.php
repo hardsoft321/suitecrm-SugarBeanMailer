@@ -9,7 +9,7 @@ $manifest = array (
   'name' => 'SugarBeanMailer',
   'published_date' => '2015-05-06',
   'type' => 'module',
-  'version' => '0.0.3',
+  'version' => '0.0.4',
 );
 
 $installdefs = array (
@@ -18,6 +18,18 @@ $installdefs = array (
     array(
         'from' => '<basepath>/source/copy',
         'to' => '.'
+    ),
+  ),
+  'language' => array (
+    array (
+      'from' => '<basepath>/source/language/application/ru_ru.SugarBeanMailer.php',
+      'to_module' => 'application',
+      'language' => 'ru_ru',
+    ),
+    array (
+      'from' => '<basepath>/source/language/application/en_us.SugarBeanMailer.php',
+      'to_module' => 'application',
+      'language' => 'en_us',
     ),
   ),
 );

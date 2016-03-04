@@ -46,12 +46,18 @@ class SugarBeanMailer extends SugarBean
         $this->templateFile = $templateFile;
     }
 
+    public function setAltTemplate($templateName) {
+        $this->altTemplateName = $templateName;
+    }
+
     protected function set_notification_body($xtpl, $bean) {
         if(in_array('set_notification_body', get_class_methods($this->bean))) {
             $this->bean->current_notify_user = $this->current_notify_user;
             $xtpl = $this->bean->set_notification_body($xtpl, $this->bean);
         }
-        return new _BeanXTemplate($xtpl, $this->templateName, $this->templateData, $this->templateFile);
+        $_xtpl = new _BeanXTemplate($xtpl, $this->templateName, $this->templateData, $this->templateFile);
+        $_xtpl->altTemplateName = $this->altTemplateName;
+        return $_xtpl;
     }
 
     /**
@@ -100,6 +106,7 @@ class _BeanXTemplate
     private $xtpl;
     private $templateName;
     private $templateData;
+    public $altTemplateName;
 
     public function __construct($xtpl, $templateName, $templateData, $file = null) {
         global $beanList;
@@ -130,14 +137,22 @@ class _BeanXTemplate
     }
 
     public function parse ($bname) {
-        $this->xtpl->parse($this->_getTemplateName($bname));
+        $_bname = $this->_replaceTemplateName($bname, $this->templateName);
+        if(!empty($this->xtpl->blocks[$_bname])) {
+            $this->xtpl->parse($_bname);
+        }
+        else {
+            $_bname_alt = $this->_replaceTemplateName($bname, $this->altTemplateName);
+            $this->xtpl->parse($_bname_alt);
+        }
     }
 
     public function text($bname) {
-        return $this->xtpl->text($this->_getTemplateName($bname));
+        $text = $this->xtpl->text($this->_replaceTemplateName($bname, $this->templateName));
+        return !empty($text) ? $text : $this->xtpl->text($this->_replaceTemplateName($bname, $this->altTemplateName));
     }
 
-    protected function _getTemplateName($bname) {
-        return ($this->templateName ? $this->templateName : 'Default').(strpos($bname, "_Subject") !== false ? "_Subject" : "");
+    protected function _replaceTemplateName($bname, $newName) {
+        return ($newName ? $newName : 'Default').(strpos($bname, "_Subject") !== false ? "_Subject" : "");
     }
 }
