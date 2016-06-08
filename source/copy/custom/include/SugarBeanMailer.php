@@ -12,6 +12,7 @@ class SugarBeanMailer extends SugarBean
     private $templateName;
     private $templateData;
     private $templateFile;
+    private $altTemplateName;
 
     public function __construct($bean) {
         $this->bean = $bean;
@@ -48,6 +49,18 @@ class SugarBeanMailer extends SugarBean
 
     public function setAltTemplate($templateName) {
         $this->altTemplateName = $templateName;
+    }
+
+    public static function getSiteUrl() {
+        global $sugar_config;
+        $parsedSiteUrl = parse_url($sugar_config['site_url']);
+        $host = $parsedSiteUrl['host'];
+        if(!isset($parsedSiteUrl['port'])) {
+            $parsedSiteUrl['port'] = 80;
+        }
+        $port = ($parsedSiteUrl['port'] != 80) ? ":".$parsedSiteUrl['port'] : '';
+        $path = !empty($parsedSiteUrl['path']) ? $parsedSiteUrl['path'] : "";
+        return "{$parsedSiteUrl['scheme']}://{$host}{$port}{$path}";
     }
 
     protected function set_notification_body($xtpl, $bean) {
