@@ -15,8 +15,11 @@ class NotificationCopy
 {
     public static function getFieldHtml($bean, $field, $value, $view)
     {
+        global $db, $locale;
+
         $isDuplicate = isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true';
-        if(!empty($bean->fetched_row['id']) && !$isDuplicate) {
+        $isReply = isset($_REQUEST['isReply']) && $_REQUEST['isReply'] == 'true';
+        if(!empty($bean->fetched_row['id']) && !$isDuplicate && !$isReply) {
             return '';
         }
         if($view != 'EditView' && $view != 'QuickCreate') {
@@ -24,7 +27,16 @@ class NotificationCopy
         }
         $ss = new Sugar_Smarty();
         $ss->assign('formName', $view == 'EditView' ? 'EditView' : 'form_SubpanelQuickCreate_'.$bean->module_name);
+        $ss->assign('notify_to', $bean->notify_to);
+
+        $notify_to_users = array ();
+        $quotedUsersIds = array_map (function ($i) { return "'" . trim ($i, '^') . "'"; }, explode(',', $bean->notify_to));
+        $q = $db->query("SELECT id, first_name, last_name FROM users WHERE id IN (" . implode (',', $quotedUsersIds) . ") AND deleted = 0");
+        while ($u = $db->fetchByAssoc($q)) $notify_to_users[$u['id']] = $locale->getLocaleFormattedName($u['first_name'], $u['last_name']);
+        $ss->assign('notify_to_users', $notify_to_users);
+
         return $ss->fetch('custom/include/NotificationCopy/NotificationCopy.tpl');
+
     }
 
     public function sendCopyAfterSave($bean, $event)

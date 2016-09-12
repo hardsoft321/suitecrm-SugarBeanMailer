@@ -42,4 +42,14 @@ array (
     'function' => 'sendCopyAfterSave',
 ),
 
+Для сохранения выбранного списка в базе добавте поле в словарь
+$dictionary[<Module>]['fields']['notify_to'] = array (
+      'name' => 'notify_to',
+      'vname' => 'LBL_NOTIFY_TO',
+      'type' => 'multinum',
+      'dbType' => 'text',
+      'len' => '1000',
+      'audited' => true,
+);
+
 Рекомендуется создать почтовый шаблон <Object>Created.

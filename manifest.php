@@ -7,9 +7,9 @@ $manifest = array (
   'icon' => '',
   'is_uninstallable' => true,
   'name' => 'SugarBeanMailer',
-  'published_date' => '2015-05-06',
+  'published_date' => '2016-09-12',
   'type' => 'module',
-  'version' => '0.0.5',
+  'version' => '0.1.0',
 );
 
 $installdefs = array (
