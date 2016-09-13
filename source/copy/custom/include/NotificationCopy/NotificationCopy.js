@@ -16,7 +16,7 @@ lab321.email.refreshNotifyTo = function(item) {
 lab321.email.cloneRecipientField = function(item) {
     var module = 'notification_copy';
     if(typeof lab321.email.cloneRecipientCount === "undefined") {
-        lab321.email.cloneRecipientCount = $('.editlistitem', $(item).closest('#NotificationCopy_span')).length;
+        lab321.email.cloneRecipientCount = $('.editlistitem', $(item).closest('#NotificationCopy')).length;
     }
     if(item.siblings('.editlistitem').length >= 20) {
         return;
@@ -95,7 +95,7 @@ lab321.email.set_return = function(popup_reply_data) {
         }
         var item = lab321.email.cloneRecipientField($('form[name="'+popup_reply_data.form_name+'"] .item_template'));
         $(item).find('.relate_id').val(user_id).end().find('.relate_name').val(full_name);
-        lab321.email.refreshNotifyTo($('form[name="'+popup_reply_data.form_name+'"] .item_template').closest('#NotificationCopy_span'));
+        lab321.email.refreshNotifyTo($('form[name="'+popup_reply_data.form_name+'"] .item_template').closest('#NotificationCopy'));
     }
 }
 

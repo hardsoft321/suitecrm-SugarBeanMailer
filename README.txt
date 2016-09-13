@@ -42,8 +42,8 @@ array (
     'function' => 'sendCopyAfterSave',
 ),
 
-Для сохранения выбранного списка в базе добавте поле в словарь
-$dictionary[<Module>]['fields']['notify_to'] = array (
+Для сохранения выбранного списка в базе добавьте поле в словарь
+$dictionary[<Object>]['fields']['notify_to'] = array (
       'name' => 'notify_to',
       'vname' => 'LBL_NOTIFY_TO',
       'type' => 'multinum',
