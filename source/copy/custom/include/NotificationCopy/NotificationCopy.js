@@ -57,6 +57,7 @@ lab321.email.set_return = function(popup_reply_data) {
         lab321.email.refreshNotifyTo($('form[name="'+popup_reply_data.form_name+'"]'));
         return;
     }
+
     var first_name_index = -1;
     var last_name_index = -1;
     var viewList = $(lab321.email.popupWindow.document).find('body.popupBody form#MassUpdate table.list.view');
@@ -71,6 +72,7 @@ lab321.email.set_return = function(popup_reply_data) {
         });
     });
     $('form[name="'+popup_reply_data.form_name+'"] .editlistitem > input.relate_id[value=""]').closest('.editlistitem').remove();
+
     for(var i in popup_reply_data.selection_list) {
         var user_id = popup_reply_data.selection_list[i];
         var full_name = user_id;
@@ -93,6 +95,7 @@ lab321.email.set_return = function(popup_reply_data) {
         }
         var item = lab321.email.cloneRecipientField($('form[name="'+popup_reply_data.form_name+'"] .item_template'));
         $(item).find('.relate_id').val(user_id).end().find('.relate_name').val(full_name);
-        lab321.email.refreshNotifyTo(form[name="'+popup_reply_data.form_name+'"]);
+        lab321.email.refreshNotifyTo($('form[name="'+popup_reply_data.form_name+'"] .item_template').closest('#NotificationCopy_span'));
     }
 }
+
