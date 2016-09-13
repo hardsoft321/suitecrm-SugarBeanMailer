@@ -78,7 +78,7 @@
 
 <div class="options">
 {if !empty($params.show_just_store)}
-<label><input type="checkbox" name="notification_copy_just_store" value="1" checked="checked"> {sugar_translate label="LBL_NOTIFY_JUST_STORE"}</label>
+<label><input type="checkbox" name="notification_copy_just_store" id="notification_copy_just_store" value="1" checked="checked"> {sugar_translate label="LBL_NOTIFY_JUST_STORE"}</label>
 {/if}
 </div>
 
